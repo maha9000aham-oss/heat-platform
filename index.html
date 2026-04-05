@@ -1,0 +1,732 @@
+note:
+التوضيح: سنبدأ بنسخة أولية جاهزة لدرس انتقال الحرارة تشمل التمهيد والعرض والتجربة والتقويم والمسائل داخل ملف واحد.
+خطوات الحل: (انسخي هذا الملف كاملًا داخل index.html ثم افتحيه أو ارفعيه على GitHub Pages)
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة درس انتقال الحرارة</title>
+  <style>
+    :root{
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --secondary:#0f172a;
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:#dbeafe;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --warning:#f59e0b;
+      --soft:#eff6ff;
+      --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:"Tahoma","Arial",sans-serif;
+      background:linear-gradient(180deg,#eff6ff 0%,#f8fafc 100%);
+      color:var(--text);
+    }
+
+    .container{
+      width:min(1100px,92%);
+      margin:auto;
+    }
+
+    .hero{
+      padding:40px 0 24px;
+    }
+
+    .hero-card{
+      background:linear-gradient(135deg,#1d4ed8,#2563eb 55%,#60a5fa);
+      color:#fff;
+      border-radius:28px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -80px -80px auto;
+      width:240px;
+      height:240px;
+      background:rgba(255,255,255,.12);
+      border-radius:50%;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+      font-size:14px;
+      margin-bottom:14px;
+    }
+
+    h1,h2,h3,p{
+      margin:0;
+    }
+
+    .hero h1{
+      font-size:38px;
+      margin-bottom:12px;
+    }
+
+    .hero p{
+      font-size:18px;
+      line-height:1.9;
+      max-width:760px;
+      color:#eef6ff;
+    }
+
+    .hero-actions{
+      margin-top:20px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:14px 18px;
+      cursor:pointer;
+      font-size:16px;
+      font-weight:700;
+      transition:.2s ease;
+    }
+
+    .btn-primary{
+      background:#fff;
+      color:var(--primary-dark);
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-2px);
+    }
+
+    .btn-outline{
+      background:transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.5);
+    }
+
+    .grid{
+      display:grid;
+      gap:18px;
+    }
+
+    .top-grid{
+      grid-template-columns:1.1fr .9fr;
+      margin:22px 0;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+
+    .section{
+      margin:18px 0 26px;
+    }
+
+    .section-title{
+      font-size:28px;
+      color:var(--primary-dark);
+      margin-bottom:10px;
+    }
+
+    .section-subtitle{
+      color:var(--muted);
+      line-height:1.9;
+      margin-bottom:18px;
+    }
+
+    .quick-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .quick-item{
+      background:var(--soft);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      line-height:1.9;
+    }
+
+    .objectives{
+      display:grid;
+      gap:12px;
+    }
+
+    .objective{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .tab-btn{
+      padding:12px 16px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-weight:700;
+      color:var(--primary-dark);
+    }
+
+    .tab-btn.active{
+      background:var(--primary-dark);
+      color:#fff;
+      border-color:var(--primary-dark);
+    }
+
+    .tab-panel{
+      display:none;
+      animation:fade .25s ease;
+    }
+
+    .tab-panel.active{
+      display:block;
+    }
+
+    @keyframes fade{
+      from{opacity:0; transform:translateY(6px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .explain{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      align-items:stretch;
+    }
+
+    .media-box{
+      border:2px dashed #93c5fd;
+      border-radius:18px;
+      background:#f8fbff;
+      padding:18px;
+      min-height:220px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#334155;
+      line-height:1.9;
+    }
+
+    .fact-box{
+      background:#eff6ff;
+      border:1px solid #bfdbfe;
+      border-radius:18px;
+      padding:18px;
+      line-height:2;
+    }
+
+    .steps{
+      display:grid;
+      gap:12px;
+    }
+
+    .step{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+    }
+
+    .step-num{
+      min-width:34px;
+      height:34px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--primary-dark);
+      color:#fff;
+      font-weight:700;
+    }
+
+    .question-card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      background:#fff;
+    }
+
+    .question-title{
+      font-size:20px;
+      margin-bottom:14px;
+      color:var(--secondary);
+      line-height:1.8;
+    }
+
+    .options{
+      display:grid;
+      gap:10px;
+    }
+
+    .option{
+      width:100%;
+      text-align:right;
+      background:#f8fafc;
+      border:1px solid #cbd5e1;
+      border-radius:14px;
+      padding:13px 14px;
+      cursor:pointer;
+      font-size:16px;
+    }
+
+    .option:hover{
+      border-color:#60a5fa;
+      background:#f0f9ff;
+    }
+
+    .feedback{
+      margin-top:14px;
+      border-radius:14px;
+      padding:12px 14px;
+      display:none;
+      line-height:1.9;
+      font-weight:700;
+    }
+
+    .feedback.success{
+      display:block;
+      background:#f0fdf4;
+      border:1px solid #86efac;
+      color:#166534;
+    }
+
+    .feedback.error{
+      display:block;
+      background:#fef2f2;
+      border:1px solid #fca5a5;
+      color:#991b1b;
+    }
+
+    .problem{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      line-height:2;
+      margin-bottom:14px;
+    }
+
+    .answer-btn{
+      background:var(--warning);
+      color:#fff;
+      margin-top:10px;
+    }
+
+    .solution{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#fffbeb;
+      border:1px solid #fcd34d;
+      line-height:1.9;
+    }
+
+    .score-board{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .score-box{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    .score-box h3{
+      font-size:15px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .score-box strong{
+      font-size:30px;
+      color:var(--primary-dark);
+    }
+
+    .footer-note{
+      margin:30px 0 40px;
+      background:#0f172a;
+      color:#fff;
+      border-radius:22px;
+      padding:22px;
+      line-height:2;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    .notebook-box{
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      line-height:2;
+    }
+
+    .notebook-label{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:#dbeafe;
+      color:#1e3a8a;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    @media (max-width:900px){
+      .top-grid,
+      .explain,
+      .score-board{
+        grid-template-columns:1fr;
+      }
+
+      .hero h1{
+        font-size:30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <span class="badge">درس تفاعلي – الصف الثاني المتوسط</span>
+        <h1>منصة تعليمية: انتقال الحرارة</h1>
+        <p>
+          منصة مبسطة تشمل التمهيد، العرض التعليمي، التجارب، التقويم، والمسائل التطبيقية
+          لتقديم درس متميز وواضح أمام التقييم.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="scrollToSection('intro')">ابدئي التمهيد</button>
+          <button class="btn btn-outline" onclick="scrollToSection('assessment')">انتقلي إلى التقويم</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="top-grid grid">
+      <div class="card">
+        <h2 class="section-title">التمهيد</h2>
+        <p class="section-subtitle">
+          افتحي الدرس بسؤال مثير للتفكير حتى تربط الطالبة المفهوم بحياتها اليومية.
+        </p>
+        <div class="quick-list">
+          <div class="quick-item"><strong>سؤال تمهيدي:</strong> لماذا نشعر بحرارة كوب الشاي الساخن عند لمسه؟</div>
+          <div class="quick-item"><strong>سؤال ربط:</strong> كيف تصل حرارة الشمس إلى الأرض رغم وجود فراغ؟</div>
+          <div class="quick-item"><strong>توقع:</strong> ما أسرع طريقة لانتقال الحرارة: التوصيل أم الحمل أم الإشعاع؟</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">أهداف الدرس</h2>
+        <div class="objectives">
+          <div class="objective">أن تفسر الطالبة معنى انتقال الحرارة.</div>
+          <div class="objective">أن تميز بين التوصيل والحمل والإشعاع.</div>
+          <div class="objective">أن تطبق المفهوم على مواقف حياتية وتجارب بسيطة.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="intro" class="section card">
+      <h2 class="section-title">العرض التعليمي</h2>
+      <p class="section-subtitle">
+        الحرارة تنتقل دائمًا من الجسم الساخن إلى الجسم الأبرد، وتنتقل بثلاث طرق رئيسية:
+        التوصيل، الحمل الحراري، والإشعاع.
+      </p>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab1">التوصيل</button>
+        <button class="tab-btn" data-tab="tab2">الحمل الحراري</button>
+        <button class="tab-btn" data-tab="tab3">الإشعاع</button>
+        <button class="tab-btn" data-tab="tab4">ملخص NotebookLM</button>
+      </div>
+
+      <div id="tab1" class="tab-panel active">
+        <div class="explain">
+          <div class="fact-box">
+            <h3>التوصيل</h3>
+            <p>
+              هو انتقال الحرارة بالتلامس المباشر، ويظهر غالبًا في المواد الصلبة.
+              عندما تسخن الملعقة المعدنية داخل كوب الشاي فإن الحرارة تنتقل عبر جزيئات المعدن.
+            </p>
+            <p><strong>مثال:</strong> تسخن يدك إذا أمسكت جسمًا ساخنًا.</p>
+          </div>
+          <div class="media-box">
+            ضعي هنا صورة أو لقطة من NotebookLM أو صورة ملعقة داخل مشروب ساخن
+          </div>
+        </div>
+      </div>
+
+      <div id="tab2" class="tab-panel">
+        <div class="explain">
+          <div class="fact-box">
+            <h3>الحمل الحراري</h3>
+            <p>
+              هو انتقال الحرارة في السوائل والغازات بسبب حركة الجزيئات.
+              الجزيئات الساخنة ترتفع للأعلى، والباردة تهبط للأسفل.
+            </p>
+            <p><strong>مثال:</strong> حركة الماء عند تسخينه، أو حركة الهواء قرب البحر.</p>
+          </div>
+          <div class="media-box">
+            ضعي هنا صورة توضح صعود الهواء الساخن وهبوط الهواء البارد
+          </div>
+        </div>
+      </div>
+
+      <div id="tab3" class="tab-panel">
+        <div class="explain">
+          <div class="fact-box">
+            <h3>الإشعاع</h3>
+            <p>
+              هو انتقال الحرارة على شكل موجات، ولا يحتاج إلى وسط ناقل.
+              لذلك تصل حرارة الشمس إلى الأرض عبر الفضاء.
+            </p>
+            <p><strong>مثال:</strong> الشعور بحرارة الشمس أو المدفأة من مسافة.</p>
+          </div>
+          <div class="media-box">
+            ضعي هنا صورة للشمس أو المدفأة أو جزء من العرض التقديمي
+          </div>
+        </div>
+      </div>
+
+      <div id="tab4" class="tab-panel">
+        <div class="notebook-box">
+          <span class="notebook-label">مكان مخصص لمحتوى NotebookLM</span>
+          <p>
+            انسخي هنا الملخص النهائي أو النص المستخرج من NotebookLM.
+            ويمكنك تقسيمه إلى نقاط قصيرة حتى يظهر بشكل منظم أثناء الشرح أمام الطالبات.
+          </p>
+          <p>
+            مثال:
+            تنتقل الحرارة من الساخن إلى البارد. التوصيل يحدث في المواد الصلبة، والحمل في السوائل والغازات، والإشعاع لا يحتاج إلى وسط ناقل.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section card">
+      <h2 class="section-title">التجربة العملية</h2>
+      <p class="section-subtitle">
+        تجربة بسيطة يمكن عرضها داخل المنصة أو تنفيذها داخل الصف.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>أحضري كوبًا يحتوي على ماء دافئ وكوبًا آخر يحتوي على ثلج.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>ضعي ملعقة معدنية داخل الكوب الدافئ، ولاحظي سخونة طرفها بعد قليل.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>اسألي الطالبات: أي نوع من انتقال الحرارة حدث هنا؟</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div>اعرضي مثالًا آخر على الحمل أو الإشعاع للمقارنة.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="assessment" class="section card">
+      <h2 class="section-title">التقويم التفاعلي</h2>
+      <p class="section-subtitle">
+        اختاري الإجابة الصحيحة، وستظهر النتيجة مباشرة.
+      </p>
+
+      <div class="grid" style="gap:16px;">
+        <div class="question-card" data-correct="1">
+          <div class="question-title">1) انتقال الحرارة عبر تلامس جسمين يسمى:</div>
+          <div class="options">
+            <button class="option" onclick="checkAnswer(this,0)">الإشعاع</button>
+            <button class="option" onclick="checkAnswer(this,1)">التوصيل</button>
+            <button class="option" onclick="checkAnswer(this,2)">الحمل الحراري</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+        <div class="question-card" data-correct="2">
+          <div class="question-title">2) الطريقة التي تنتقل بها حرارة الشمس إلى الأرض هي:</div>
+          <div class="options">
+            <button class="option" onclick="checkAnswer(this,0)">التوصيل</button>
+            <button class="option" onclick="checkAnswer(this,1)">الحمل الحراري</button>
+            <button class="option" onclick="checkAnswer(this,2)">الإشعاع</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+        <div class="question-card" data-correct="0">
+          <div class="question-title">3) يحدث الحمل الحراري غالبًا في:</div>
+          <div class="options">
+            <button class="option" onclick="checkAnswer(this,0)">السوائل والغازات</button>
+            <button class="option" onclick="checkAnswer(this,1)">الفراغ فقط</button>
+            <button class="option" onclick="checkAnswer(this,2)">المعادن الصلبة فقط</button>
+          </div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section card">
+      <h2 class="section-title">المسائل التطبيقية</h2>
+      <p class="section-subtitle">
+        مسائل قصيرة لقياس الفهم العميق.
+      </p>
+
+      <div class="problem">
+        <strong>المسألة 1:</strong>
+        وضعتِ ملعقة معدنية في كوب شاي ساخن، وبعد دقائق أصبحت الملعقة ساخنة.
+        ما نوع انتقال الحرارة؟ ولماذا؟
+        <br>
+        <button class="btn answer-btn" onclick="toggleSolution('s1')">إظهار الحل</button>
+        <div id="s1" class="solution">
+          الحل: التوصيل؛ لأن الحرارة انتقلت بالتلامس المباشر من الشاي الساخن إلى الملعقة المعدنية.
+        </div>
+      </div>
+
+      <div class="problem">
+        <strong>المسألة 2:</strong>
+        شعرتِ بحرارة الشمس على وجهك في الصباح. ما طريقة انتقال الحرارة هنا؟
+        <br>
+        <button class="btn answer-btn" onclick="toggleSolution('s2')">إظهار الحل</button>
+        <div id="s2" class="solution">
+          الحل: الإشعاع؛ لأن الحرارة انتقلت على شكل موجات دون الحاجة إلى وسط ناقل.
+        </div>
+      </div>
+
+      <div class="problem">
+        <strong>المسألة 3:</strong>
+        عند تسخين الماء في إناء، لماذا يرتفع الماء الساخن إلى أعلى؟
+        <br>
+        <button class="btn answer-btn" onclick="toggleSolution('s3')">إظهار الحل</button>
+        <div id="s3" class="solution">
+          الحل: بسبب الحمل الحراري؛ لأن الماء الساخن تقل كثافته فيرتفع للأعلى، بينما يهبط الماء الأبرد للأسفل.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="score-board">
+        <div class="score-box">
+          <h3>عدد الأسئلة</h3>
+          <strong id="totalQuestions">3</strong>
+        </div>
+        <div class="score-box">
+          <h3>الإجابات الصحيحة</h3>
+          <strong id="correctAnswers">0</strong>
+        </div>
+        <div class="score-box">
+          <h3>نسبة الإتقان</h3>
+          <strong id="mastery">0%</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-note">
+      <strong>خاتمة الدرس:</strong>
+      تنتقل الحرارة من الجسم الساخن إلى الجسم البارد بثلاث طرق رئيسية:
+      التوصيل، الحمل الحراري، والإشعاع. فهم هذه الطرق يساعد الطالبة على تفسير كثير من الظواهر في حياتها اليومية.
+    </section>
+
+  </main>
+
+  <script>
+    const answeredQuestions = new Set();
+    let correctCount = 0;
+    const totalQuestions = document.querySelectorAll('.question-card').length;
+
+    function scrollToSection(id){
+      document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(panel=>panel.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function checkAnswer(button, selectedIndex){
+      const card = button.closest('.question-card');
+      const feedback = card.querySelector('.feedback');
+
+      if(answeredQuestions.has(card)){
+        return;
+      }
+
+      const correctIndex = Number(card.dataset.correct);
+
+      if(selectedIndex === correctIndex){
+        feedback.className = 'feedback success';
+        feedback.textContent = 'إجابة صحيحة';
+        correctCount++;
+      }else{
+        feedback.className = 'feedback error';
+        feedback.textContent = 'إجابة غير صحيحة';
+      }
+
+      answeredQuestions.add(card);
+      updateScore();
+    }
+
+    function updateScore(){
+      document.getElementById('correctAnswers').textContent = correctCount;
+      const mastery = Math.round((correctCount / totalQuestions) * 100);
+      document.getElementById('mastery').textContent = mastery + '%';
+    }
+
+    function toggleSolution(id){
+      const box = document.getElementById(id);
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>
